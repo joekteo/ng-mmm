@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+  <meta charset='UTF-8'>
+  <title>ng-mmm</title>
+</head>
+<body>
+  <h1>MMM APP</h1>
+  <div data-ng-app='mmmApp'>
+    <div data-ng-controller='mmmCtrl'>
+      <form name='mmmForm'>
+      <label>Insert Mean, Median, Mode Numbers</label>
+      <input type='text' data-ng-model='mmm.numbers'/>
+      <br>
+      </form>
+      <button data-ng-click='calculate()'>Calculate</button>
+      <div data-ng-hide='hidden'>
+        <p>Mean: {{mmm.mean}}</p>
+        <p>Median: {{mmm.median}}</p>
+        <p>Mode: {{mmm.mode}}</p>
+      </div>
+    </div>
+  </div>
+
+  <script src='bundle.js'></script>
+</body>
+</html>
