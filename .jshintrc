@@ -10,23 +10,15 @@
     "beforeEach" : false,
     "after"      : false,
     "afterEach"  : false,
+    "expect"     : true,
     "equal"      : false
   },
   "globalstrict": true,
   "quotmark": false,
   "smarttabs": true,
   "trailing": true,
-  "browser": true,
-  "jquery": true,
-  "node": true,
-  "camelcase": false,
-  "eqeqeq": true,
-  "indent": 2,
-  "latedef": true,
-  "maxlen": 80,
-  "newcap": true,
-  "quotmark": "single",
   "undef": true,
   "unused": true,
-  "eqnull": true
+  "indent": 2,
+  "node": true
 }

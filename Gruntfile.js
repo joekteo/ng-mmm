@@ -1,29 +1,44 @@
-/*jshint node:true*/
 'use strict';
 
 module.exports = function(grunt) {
-  grunt.loadNpmTasks('grunt-browserify');
+  grunt.loadNpmTasks('grunt-contrib-jshint');
+  grunt.loadNpmTasks('grunt-simple-mocha');
+  grunt.loadNpmTasks('grunt-jscs');
   grunt.loadNpmTasks('grunt-contrib-clean');
   grunt.loadNpmTasks('grunt-contrib-copy');
-  grunt.loadNpmTasks('grunt-contrib-jshint');
-  grunt.loadNpmTasks('grunt-sass');
-  grunt.loadNpmTasks('grunt-jscs');
-  grunt.loadNpmTasks('grunt-simple-mocha');
+  grunt.loadNpmTasks('grunt-browserify');
+  grunt.loadNpmTasks('grunt-karma');
+
+  var srcFiles = [
+    './*.js',
+    'lib/**/*.js',
+    'models/**/*.js',
+    'routes/**/*.js',
+    'public/**/*.js',
+    'test/**/*test.js'
+  ];
 
   grunt.initConfig({
+    jshint: {
+      all: srcFiles,
+      options: {
+        jshintrc: true
+      }
+    },
 
     jscs: {
-      src: ['app/js/**/*.js', 'server.js'],
+      src: ['server.js', 'Gruntfile.js', 'test/api/*.js', 'lib/*.js',
+      'app/**/*.js', 'routes/*.js', 'test/client/*.js'],
       options: {
         config: '.jscsrc'
       }
     },
 
-    jshint: {
+    simplemocha: {
+      src: ['test/api/*.js'],
       options: {
-        jshintrc: '.jshintrc'
-      },
-      src: ['models/**/*.js', 'server.js', 'routers/**/*.js', 'app/js/**/*.js']
+        timeout: 3000
+      }
     },
 
     clean: {
@@ -51,31 +66,26 @@ module.exports = function(grunt) {
       },
 
       test: {
-        src: ['test/client/**/*test.js'],
+        src: ['test/client/**/*.js'],
         dest:'test/test_bundle.js',
         options:{
           transform: ['debowerify']
         }
-      },
-
-      sass: {
-        dist: {
-          files: {
-            'build/main.css': 'app/css/scss/main.scss',
-            'build/sweetalert.css': 'bower_components/sweetalert/lib/sweet-alert.scss'
-          }
-        }
       }
     },
 
-    simplemocha: {
-      src: ['test/client/*.js']
+    karma: {
+      unit: { configFile: 'karma.conf.js' },
+      continuous: {
+        configFile: 'karma.conf.js',
+        singleRun: true,
+        browsers: ['PhantomJS']
+      }
     }
   });
 
-  grunt.registerTask('lint', ['jshint', 'jscs']);
+  grunt.registerTask('test', ['jshint', 'jscs', 'simplemocha']);
+  grunt.registerTask('test:client', ['browserify:test', 'karma:unit']);
   grunt.registerTask('build:dev', ['clean:dev', 'browserify:dev', 'copy:dev']);
-  grunt.registerTask('build:test', ['browserify:test']);
-  grunt.registerTask('test', ['build:dev', 'build:test', 'simplemocha']);
   grunt.registerTask('default', ['test']);
 };
